@@ -12,4 +12,6 @@ int main() {
   vector<string> words;
   int width,height;
   getinformation(title,words,width,height);
+  Puzzle wordsearch = createWordSearch(title,words,width,height);
+  wordsearch.gridPrint();
 }

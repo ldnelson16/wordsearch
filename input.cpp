@@ -6,12 +6,23 @@
 
 using namespace std;
 
+pair<int,int> defaultDimensions(vector<string> &words){
+  int maxlen = 0;
+  for(int i=0;i<words.size();++i){
+    if(words[i].size()>maxlen){
+      maxlen = words[i].size();
+    }
+  }
+  pair <int,int> dimensions = {maxlen,words.size()*3/2};
+  return dimensions;
+}
+
 void getinformation(string &title,vector<string> &words,int &width,int &height) {
   cout << "You are creating a word search, please input the title of your word search." << endl;
   cin >> title;
   cout << "Your puzzle is titled " << title << endl << "What width do you want your puzzle? (If default, enter 0)(minimum 10)" << endl;
   cin >> width;
-  while (width>0 && width <=10){
+  while (width!=0 && width <10 && width > 25){
     cout << "Try again " << endl;
     cin >> width;
   }
@@ -19,9 +30,9 @@ void getinformation(string &title,vector<string> &words,int &width,int &height) 
     height = 0;
   }
   else {
-    cout << "What height do you want your puzzle? (cannot be default)(minimum 10)" << endl;
+    cout << "What height do you want your puzzle? (cannot be default)(minimum 10,maximum 25)" << endl;
     cin >> height;
-    while (height <=10){
+    while (height <10 && height>25){
       cout << "Try again " << endl;
       cin >> height;
     }
@@ -47,7 +58,7 @@ void getinformation(string &title,vector<string> &words,int &width,int &height) 
         cout << "Non lower-case letter character detected in word. Try again" << endl;
         continue;
       }
-      if (word.size()>min(width,height)&&word.size()<max(width,height)&&bigwords>0){
+      if (word.size()>min(width,height)&&word.size()<max(width,max(height,25))&&bigwords>0){
         --bigwords;
         words.push_back(word);
         continue;
@@ -105,13 +116,3 @@ pair <int,int> wordAmount(const int width, const int height){
   return amt;
 }
 
-pair<int,int> defaultDimensions(vector<string> &words){
-  int maxlen = 0;
-  for(int i=0;i<words.size();++i){
-    if(words[i].size()>maxlen){
-      maxlen = words[i].size();
-    }
-  }
-  pair <int,int> dimensions = {maxlen,words.size()*3/2};
-  return dimensions;
-}
