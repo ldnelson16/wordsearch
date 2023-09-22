@@ -11,6 +11,14 @@ using namespace std;
 const int MAX_WIDTH = 25;
 const int MAX_HEIGHT = 25;
 
+struct Path {
+  string word;
+  int start_r;
+  int start_c;
+  bool dir;
+  bool back;
+};
+
 class Puzzle {
   public: 
     // Puzzle constructor
@@ -25,6 +33,10 @@ class Puzzle {
     char* gridAt(const int r, const int c);
     // Prints grid to terminal
     void gridPrint();
+    // Finds spot on grid
+    Path findSpot(string word, int index);
+    // Adds word to grid
+    void addWord(const Path path);
   private: 
     string name;
     int width,height;

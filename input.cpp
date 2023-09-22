@@ -22,7 +22,7 @@ void getinformation(string &title,vector<string> &words,int &width,int &height) 
   cin >> title;
   cout << "Your puzzle is titled " << title << endl << "What width do you want your puzzle? (If default, enter 0)(minimum 10)" << endl;
   cin >> width;
-  while (width!=0 && width <10 && width > 25){
+  while (width!=0 && (width <10 || width > 25)){
     cout << "Try again " << endl;
     cin >> width;
   }
@@ -112,7 +112,7 @@ void getinformation(string &title,vector<string> &words,int &width,int &height) 
 }
 
 pair <int,int> wordAmount(const int width, const int height){
-  pair <int,int> amt = {min(width,height) - abs(width-height)/5, abs(width-height)/3};
+  pair <int,int> amt = {min(width,height)- 2 - abs(width-height)/5, max(abs(width-height)/3-1,0)};
   return amt;
 }
 
