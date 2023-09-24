@@ -37,6 +37,8 @@ class Puzzle {
     Path findSpot(string word, int index);
     // Adds word to grid
     void addWord(const Path path);
+    // Check if word can fit in a given path
+    bool checkPath(const Path path);
   private: 
     string name;
     int width,height;
