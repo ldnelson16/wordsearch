@@ -41,70 +41,33 @@ void Puzzle::fillBlanks(){
 
 Path Puzzle::findSpot(string word, int index){
   int len = word.size();
-  int start_r,start_c;
   bool back;
   bool dir;
-  if (index==0){
-    back = false;
-    if (rand()%2 == 0){
-      if (rand()%2 == 0){
-        cout << "Row-forward" << endl;
-        start_c = rand()%(puzzleWidth()-len);
-        start_r = rand()%(puzzleHeight());
-        dir = 0;
+  int start_r = rand() % puzzleHeight();
+  int start_c = rand() & puzzleWidth();
+  for (int r=start_r;r<puzzleHeight()+start_r;++r){
+    for (int c=start_c; c<puzzleWidth()+start_c;++c){
+      int real_r = r % puzzleHeight();
+      int real_c = c % puzzleWidth();
+      cout << "Checking at position " << r << ", " << c << endl;
+      // check if word will fit in both directions
+      bool random_dim1 = rand()%2;
+      bool random_dim2 = rand()%2;
+      if (checkPath(Path{word,real_r,real_c,random_dim1,random_dim2})){
+        cout << "Found path row-wise,forwards at " << r << ", " << c << endl;
+        return Path{word,real_r,real_c,random_dim1,random_dim2};
       }
-      else {
-        cout << "Row-backwards" << endl;
-        start_c = puzzleWidth()-1-rand()%(puzzleWidth()-len);
-        start_r = rand()%(puzzleHeight());
-        dir = 0;
-        back = true;
+      else if (checkPath(Path{word,real_r,real_c,random_dim1,!random_dim2})){
+        cout << "Found path row-wise,backwards at " << r << ", " << c << endl;
+        return Path{word,real_r,real_c,random_dim1,!random_dim2};
       }
-    }
-    else {
-      if (rand()%2 == 0){
-        cout << "Column-forward" << endl;
-        start_r = rand()%(puzzleHeight()-len);
-        start_c = rand()%(puzzleWidth());
-        dir = 1;
+      else if (checkPath(Path{word,real_r,real_c,!random_dim1,random_dim2})){
+        cout << "Found path column-wise,forwards at " << r << ", " << c << endl;
+        return Path{word,real_r,real_c,!random_dim1,random_dim2};
       }
-      else {
-        cout << "Column-backward" << endl;
-        start_r = puzzleHeight()-1-rand()%(puzzleHeight()-len);
-        start_c = rand()%(puzzleWidth());
-        dir = 1;
-        back = true;
-      }
-    }
-    // return in this case, returning a path variable
-    Path path{word,start_r,start_c,dir,back};
-    return path;
-  }
-  else {
-    int start_r = rand() % puzzleHeight();
-    int start_c = rand() & puzzleWidth();
-    for (int r=start_r;r<puzzleHeight()+start_r;++r){
-      for (int c=start_c; c<puzzleWidth()+start_c;++c){
-        int real_r = r % puzzleHeight();
-        int real_c = c % puzzleWidth();
-        cout << "Checking at position " << r << ", " << c << endl;
-        // check if word will fit in both directions
-        if (checkPath(Path{word,real_r,real_c,0,0})){
-          cout << "Found path row-wise,forwards at " << r << ", " << c << endl;
-          return Path{word,real_r,real_c,0,0};
-        }
-        else if (checkPath(Path{word,real_r,real_c,0,1})){
-          cout << "Found path row-wise,backwards at " << r << ", " << c << endl;
-          return Path{word,real_r,real_c,0,1};
-        }
-        else if (checkPath(Path{word,real_r,real_c,1,0})){
-          cout << "Found path column-wise,forwards at " << r << ", " << c << endl;
-          return Path{word,real_r,real_c,1,0};
-        }
-        else if (checkPath(Path{word,real_r,real_c,1,1})){
-          cout << "Found path column-wise,backwards at " << r << ", " << c << endl;
-          return Path{word,real_r,real_c,1,1};
-        }
+      else if (checkPath(Path{word,real_r,real_c,!random_dim1,!random_dim2})){
+        cout << "Found path column-wise,backwards at " << r << ", " << c << endl;
+        return Path{word,real_r,real_c,!random_dim1,!random_dim2};
       }
     }
   }
@@ -226,7 +189,7 @@ void Puzzle::fillRandoms() {
     for (int c=0;c<puzzleWidth();++c){
       if (*gridAt(r,c)=='-'){
         // if a char in a grid is still uninitialize, give it a random character
-        // *gridAt(r,c) = ;
+        *gridAt(r,c) = static_cast<char>(rand()%26+97);
       }
     }
   }

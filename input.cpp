@@ -112,7 +112,7 @@ void getinformation(string &title,vector<string> &words,int &width,int &height) 
 }
 
 pair <int,int> wordAmount(const int width, const int height){
-  pair <int,int> amt = {min(width,height)- 1 - abs(width-height)/5, max(abs(width-height)/3,0)};
+  pair <int,int> amt = {min(width,height) - abs(width-height)/5, max(abs(width-height)/3,0)};
   return amt;
 }
 
