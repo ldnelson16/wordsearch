@@ -40,7 +40,6 @@ void Puzzle::fillBlanks(){
 }
 
 Path Puzzle::findSpot(string word, int index){
-  srand(static_cast<unsigned>(time(nullptr)));
   int len = word.size();
   int start_r,start_c;
   bool back;
@@ -82,25 +81,29 @@ Path Puzzle::findSpot(string word, int index){
     return path;
   }
   else {
-    for (int r=0;r<puzzleHeight();++r){
-      for (int c=0; c<puzzleWidth();++c){
+    int start_r = rand() % puzzleHeight();
+    int start_c = rand() & puzzleWidth();
+    for (int r=start_r;r<puzzleHeight()+start_r;++r){
+      for (int c=start_c; c<puzzleWidth()+start_c;++c){
+        int real_r = r % puzzleHeight();
+        int real_c = c % puzzleWidth();
         cout << "Checking at position " << r << ", " << c << endl;
         // check if word will fit in both directions
-        if (checkPath(Path{word,r,c,0,0})){
+        if (checkPath(Path{word,real_r,real_c,0,0})){
           cout << "Found path row-wise,forwards at " << r << ", " << c << endl;
-          return Path{word,r,c,0,0};
+          return Path{word,real_r,real_c,0,0};
         }
-        else if (checkPath(Path{word,r,c,0,1})){
+        else if (checkPath(Path{word,real_r,real_c,0,1})){
           cout << "Found path row-wise,backwards at " << r << ", " << c << endl;
-          return Path{word,r,c,0,1};
+          return Path{word,real_r,real_c,0,1};
         }
-        else if (checkPath(Path{word,r,c,1,0})){
+        else if (checkPath(Path{word,real_r,real_c,1,0})){
           cout << "Found path column-wise,forwards at " << r << ", " << c << endl;
-          return Path{word,r,c,1,0};
+          return Path{word,real_r,real_c,1,0};
         }
-        else if (checkPath(Path{word,r,c,1,1})){
+        else if (checkPath(Path{word,real_r,real_c,1,1})){
           cout << "Found path column-wise,backwards at " << r << ", " << c << endl;
-          return Path{word,r,c,1,1};
+          return Path{word,real_r,real_c,1,1};
         }
       }
     }
@@ -217,12 +220,26 @@ void Puzzle::addWord(const Path path){
   }
 }
 
+void Puzzle::fillRandoms() {
+  cout << "Filling grid with random characters" << endl;
+  for (int r=0;r<puzzleHeight();++r){
+    for (int c=0;c<puzzleWidth();++c){
+      if (*gridAt(r,c)=='-'){
+        // if a char in a grid is still uninitialize, give it a random character
+        // *gridAt(r,c) = ;
+      }
+    }
+  }
+}
+
 Puzzle createWordSearch(string title, vector<string> &words, const int width, const int height){
+  srand(static_cast<unsigned>(time(nullptr)));
   Puzzle wordsearch(title,width,height);
   wordsearch.fillBlanks();
   for (int i=0;i<words.size();++i) {
     cout << "Finding spot for " << words[i] << endl;
     wordsearch.addWord(wordsearch.findSpot(words[i],i));
   }
+  wordsearch.fillRandoms();
   return wordsearch;
 }

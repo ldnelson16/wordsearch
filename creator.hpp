@@ -39,6 +39,8 @@ class Puzzle {
     void addWord(const Path path);
     // Check if word can fit in a given path
     bool checkPath(const Path path);
+    // Fill finished grid with random letters
+    void fillRandoms();
   private: 
     string name;
     int width,height;

@@ -1,4 +1,4 @@
-title 10 10
+title 20 20
 hello
 my
 name
@@ -7,3 +7,16 @@ luke
 nelson
 and
 there
+parker
+swanton
+introduction
+animal
+purchase
+content
+flashing
+genetic
+principle
+basically
+defect
+recessive
+progeny
